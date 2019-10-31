@@ -1,0 +1,188 @@
+#include<gtk/gtk.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct lista
+{
+  GtkWidget *Edad;
+  GtkWidget *Peso;
+  char  *Genero;
+  GtkWidget *Zona[5];
+}tipolista;
+
+void Calcular(Gtkbutton *button, gpointer *data);
+void Femenino(GtkToggleButton *button, gpointer *data);
+void Masculino(GtkToggleButton *button, gpointer *data);
+void StopTheApp(Gtkbutton *button, gpointer *data);
+
+gint main(gint argc, gchar argv[])
+{
+  GtkWidget *window;
+  GtkWidget *verbox;
+  GtkWidget *horbox[12];
+  GtkWidget *entryboxe, *entryboxp;
+  GtkWidget *button;
+  GtkWidget *label;
+  GtkWidget *hombre;
+  GtkWidget *mujer;
+  tipolista datos;
+  int i;
+
+  gtk_init(&argc, &argv);
+
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_widow_set_default_size(GTK_WINDOW(window), 450, 200);
+  gtk_container_border_width(GTK_CONTAINER(window), 5);
+  
+  verbox = gtk_vbox_new(TRUE, 5);
+
+  for(i=0; i<12; i++)
+    horbox[i] = gtk_hbox_new(TRUE, 5);
+
+  //entryboxes
+  
+  label = gtk_label_new("Edad:");
+  entryboxe = gtk_entry_new();
+  datos.Edad = entryboxe;
+  gtk_pack_start(GTK_BOX(horbox[0]), label, TRUE, TRUE, 0);
+  gtk_pack_start(GTK_BOX(horbox[0]), entryboxe, TRUE, TRUE, 0);
+
+  label = gtk_label_new("Peso (libras):");
+  entryboxp = gtk_entry_new();
+  datos.Peso = entryboxp;
+  gtk_pack_start(GTK_BOX(horbox[1]), label, TRUE, TRUE, 0);
+  gtk_pack_start(GTK_BOX(horbox[1]), entryboxp, TRUE, TRUE, 0);
+
+  //radio buttons
+
+  label = gtk_label_new("");
+  hombre = gtk_radio_button_new_with_label(NULL, "Hombre");
+  gtk_signal_connect(GTK_OBJECT(hombre), "toggled", GTK_SIGNAL_FUNC(Masculino), &datos);
+  gtk_pack_start(GTK_BOX(horbox[2]), label, TRUE, TRUE, 0);
+  gtk_pack_start(GTK_BOX(horbox[2]), hombre, TRUE, TRUE, 0);
+
+  label = gtk_label_new("");
+  mujer = gtk_radio_button_new_with_label(gtk_radio_button_get_group(GTK_RADIO_BUTTON(hombre)), "Mujer");
+  gtk_signal_connect(GTK_OBJECT(mujer), "toggled", GTK_SIGNAL_FUNC(Femenino), &datos);
+  gtk_pack_start(GTK_BOX(horbox[3]), label, TRUE, TRUE, 0);
+  gtk_pack_start(GTK_BOX(horbox[3]), mujer, TRUE, TRUE, 0);
+
+  //boton calcular
+
+  button = gtk_button_new_with_label("Calcula");
+  gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(Calcular), &datos);
+  gtk_pack_start(GTK_BOX(horbox[4]), button, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[4]), label, TRUE, TRUE, 0);
+
+  //zonas titulo
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[5]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zonas");
+  gtk_pack_start(GTK_BOX(horbox[5]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[5]), label, TRUE, TRUE, 0);
+
+  //zona 1
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zona 1");
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+  label = gtk_label_new(" 50% - 60%   ");
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("0");
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+  datos.Zona[0] = label;
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[6]), label, TRUE, TRUE, 0);
+
+  //zona 2
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zona 2");
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+  label = gtk_label_new(" 60% - 70%   ");
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("0");
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+  datos.Zona[8] = label;
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[7]), label, TRUE, TRUE, 0);
+
+  //zona 3
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zona 3");
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+  label = gtk_label_new(" 70% - 80%   ");
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("0");
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+  datos.Zona[2] = label;
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[8]), label, TRUE, TRUE, 0);
+
+  //zona 4
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zona 4");
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+  label = gtk_label_new(" 80% - 90%   ");
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("0");
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+  datos.Zona[3] = label;
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[9]), label, TRUE, TRUE, 0);
+
+  //zona 5
+
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("Zona 4");
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+  label = gtk_label_new(" 90% - 100%   ");
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("0");
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+  datos.Zona[4] = label;
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+  label = gtk_label_new("");
+  gtk_pack_start(GTK_BOX(horbox[10]), label, TRUE, TRUE, 0);
+
+  for(i=0; i<12; i++)
+    gtk_box_pack_start(GTK_BOX(verbox), box[i], TRUE, TRUE, 0);
+
+  
+  gtk_signal_connect(GTK_OBJECT(window),"destroy", GTK_SIGNAL_FUNC(destroy), NULL);
+  
+  gtk_container_add(GTK_CONTAINER(window), verbox);
+  gtk_widget_show_all(window);
+  gtk_main();
+}
+
+void Masculino(GtkToggleButton *button, gpointer *data)
+{
+  gprint("Hola M");
+}
+
+void Femenino(GtkToggleButton *button, gpointer *data)
+{
+  gprint("Hola F"); 
+}
+
+void Calcular(Gtkbutton *button, gpointer *data)
+{
+  gprint("Hola C");
+}
+
+

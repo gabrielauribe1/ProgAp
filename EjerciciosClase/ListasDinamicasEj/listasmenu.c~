@@ -1,0 +1,76 @@
+#include<stdio.h>
+
+typedef struct defdato
+{
+  int dato;
+  struct defdato*sig;
+} tipodato;
+
+void InsertaInicio(tipodato **Inicio, int *numero);
+void ImprimirNum(tipodato *Inicio);
+void BorrarLista(tipodato *Inicio);
+
+int main (void)
+{
+  tipodato *Inicio=NULL;
+  int Opcion, valor;
+  
+  do
+    {
+  printf("Bienvenido al menú\n");
+  printf("Escoja la opción que deseé:\n");
+  printf("1. Insertar numeros\n");
+  printf("2. Mostrar numeros insertados\n");
+  printf("3. Salir\n");
+  scanf("%d", &opcion);
+  switch(Opcion)
+    {
+    case 1:
+      printf("Introduzca los numeros que desea insertar en la lista (letra para terminar) :\n");
+      while(scanf("%d", &valor)==1)
+      InsertaInicio(&);
+      break;
+    case 2:
+      ImprimirNum();
+      break;
+    case 3:
+      BorrarLista();
+      Salir=1;
+      printf("Saliendo del programa...");
+      break;
+    default: printf("Opcion incorrecta\n");
+    }
+    }while (Salir!=1);
+  return 0;
+}
+    
+void InsertaInicio(tipodato **Inicio, int *numero)
+{
+  tipodato *temp;
+  temp=(tipodato *) malloc(sizeof(tipodato));
+  temp -> dato = numero;
+  temp -> sig = *Inicio;
+  *Inicio = temp;
+}
+void ImprimeNum(tipodato *Inicio)
+{
+  tipodato *temp;
+  temp=Inicio;
+  while(temp!=NULL)
+    {
+      printf("%d\n", temp->dato);
+      temp = temp->sig;
+    }
+}
+
+void BorrarLista(tipodato *Inicio)
+{
+  tipodato *temp;
+  temp = Inicio;
+  while(temp!=NULL)
+    {
+      Inicio=Inicio->sig;
+      free(temp);
+      temp=Inicio;
+    }
+}

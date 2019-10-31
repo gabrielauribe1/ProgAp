@@ -1,0 +1,177 @@
+//Arbol recursivo
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+struct nodo
+{
+  int num;
+  struct nodo *izq, *der;
+};
+
+void Inserta(struct nodo *insercion, struct nodo *elemento);
+void Imprime(struct nodo *p);
+void BorraNumero(struct nodo *insercion, struct nodo *elemento);
+void Borra(struct nodo *p);
+
+int main(void)
+{
+  int i, opcion, popo, salir=0;
+  struct nodo *raiz, *temp;
+
+  raiz= NULL;
+  
+  do
+    {
+      system("clear");
+      printf("Introduzca la opcion que desea:\n");
+      printf("1. Insertar los numeros\n");
+      printf("2. Listar los numeros insertados\n");
+      printf("3. Eliminar un numero\n");
+      printf("4. Salir del programa\n");
+      __fpurge(stdin);
+      scanf("%d", &opcion);
+      
+      switch(opcion)
+	{
+	case 1:
+	  system("clear");
+	  printf("Teclea eneros, seguido por un caracter no numerico\n");
+	  __fpurge(stdin);
+	  while(scanf("%d", &i)==1)
+	    {
+	      temp = (struct nodo *)malloc(sizeof(struct nodo));
+	      temp -> der = NULL;
+	      temp -> izq = NULL;
+	      temp -> num = i;
+	      if(raiz==NULL)
+		raiz=temp;
+	      else
+		Inserta(raiz, temp);
+	    }
+	  break;
+	case 2:
+	  system("clear");
+	  if(raiz==NULL)
+	    {
+	      printf("No hay numeros insertados\n");
+	    }
+	  else
+	    {
+	      system("clear");
+	      printf("Numeros impresos en orden:\n");
+	      Imprime(raiz);
+	    }
+	  getchar();
+	  getchar();
+	  break;
+	case 3:
+	  system("clear");
+	  printf("Inserte el numero que desea borrar:\n");
+	  __fpurge(stdin);
+	  scanf("%d", &popo);
+	  BorraNumero(raiz, popo);
+	  break;
+	case 4:
+	  system("clear");
+	  printf("Saliendo del programa...\n");
+	  salir=1;
+	  Borra(raiz);
+	  exit(0);
+	  break;
+	default:
+	  printf("Opcion invalida\n");
+	  printf("Saliendo del programa...\n");
+	  exit(0);
+	}
+    }while(salir!=1);
+ 
+}
+
+void Inserta(struct nodo *insercion, struct nodo *elemento)
+{
+  struct nodo *avanza;
+
+  //printf("Entrando a insercion\n");
+  avanza = insercion;
+
+  if (avanza != NULL)
+    {
+      if(elemento->num > avanza->num) //muevete a la derecha
+	{
+	  if(avanza->der != NULL)
+	    Inserta(avanza->der, elemento);
+	  else
+	    {
+	      avanza->der=elemento;
+	      return;
+	    }
+	}
+      if(elemento->num <= avanza->num) //muevete a la izquierda
+	{
+	  if(avanza->izq != NULL)
+	    Inserta(avanza->izq, elemento);
+	  else
+	    {
+	      avanza->izq=elemento;
+	      return;
+	    }
+	}
+    }
+  //printf("Saliendo de insercion\n");
+	  
+}
+
+void Imprime(struct nodo *p)
+{
+  if(p != NULL)
+    {
+      Imprime(p->izq);
+      printf("%d\n", p->num);
+      Imprime(p->der);
+    }
+}
+
+void Borra(struct nodo *p)
+{
+  if(p != NULL)
+    {
+      Borra(p->izq);
+      Borra(p->der);
+      free(p);
+    }
+}
+
+void BorraNumero(struct nodo *insercion, struct nodo *elemento)
+{
+    avanza = insercion;
+
+  if (avanza != NULL)
+    {
+      if(elemento->num > avanza->num) //muevete a la derecha
+	{
+	  if(avanza->der != NULL)
+	    BorraNumero(avanza->der, elemento);
+	  else
+	    {
+	      avanza->der=elemento;
+	      return;
+	    }
+	}
+      if(elemento->num <= avanza->num) //muevete a la izquierda
+	{
+	  if(avanza->izq != NULL)
+	    BorraNumero(avanza->izq, elemento);
+	  else
+	    {
+	      avanza->izq=elemento;
+	      return;
+	    }
+	}
+    }
+  
+  
+}
+
+

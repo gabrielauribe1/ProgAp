@@ -1,0 +1,46 @@
+// metodo de seleccion
+
+#include<stdio.h>
+#include<string.h>
+#define SIZE 10
+
+vid selsort(int arr[]);
+
+int main (void)
+{
+  int arr[SIZE], i;
+
+  for(i=0; i<SIZE; i++)
+    {
+      printf("Enter element:\n");
+      scanf("%d", &arr[i]);
+    }
+  
+  selsort(arr);
+  printf("After selection sort the elements:\n");
+
+  
+  for(i=0; i<SIZE; i++)
+    printf("%d\t", arr[i]);
+  printf("\n");
+  getchar();
+}
+
+
+vid selsort(int arr[])
+{
+  int i,j,min, temp;
+
+  for(i=0; i<SIZE; i++)
+    {
+      min=i;
+      for(j=0; j<SIZE; j++)
+	if(arr[j]<arr[min])
+	  min=j;
+      temp=arr[i];
+      arr[i]=arr[min];
+      arr[min]=temp;
+    }
+}
+
+

@@ -1,0 +1,92 @@
+//Arbol recursivo
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+struct nodo
+{
+  int num;
+  struct nodo *izq, *der;
+};
+
+void Inserta(struct nodo **insercion, int i);
+void Imprime(struct nodo *p);
+void Borra(struct nodo *p);
+
+int main(void)
+{
+  int i, n;
+  struct nodo *raiz, *temp;
+
+  raiz = NULL;
+  printf("Teclea eneros, seguido por un caracter no numerico\n");
+  while(scanf("%d", &i)==1)
+    {
+      temp = (struct nodo *)malloc(sizeof(struct nodo));
+      temp -> der = NULL;
+      temp -> izq = NULL;
+      temp -> num = i;
+      if(raiz==NULL)
+	raiz=temp;
+      else
+	Inserta(&raiz, i);
+    }
+  printf("Numeros impresos en orden:\n");
+  Imprime(raiz);
+  Borra(raiz);
+}
+
+void Inserta(struct nodo *insercion, struct nodo *elemento)
+{
+  struct nodo *avanza;
+
+  printf("Entrando a insercion\n");
+  avanza = insercion;
+
+  if (avanza != NULL)
+    {
+      if(elemento->num > avanza->num)
+	{
+	  if(avanza->der != NULL)
+	    Inserta(avanza->der, elemento);
+	  else
+	    {
+	      avanza->der=elemento;
+	      return;
+	    }
+	}
+      if(elemento->num <= avanza->num)
+	{
+	  if(avanza->izq != NULL)
+	    Inserta(avanza->izq, elemento);
+	  else
+	    {
+	      avanza->izq=elemento;
+	      return;
+	    }
+	}
+    }
+  printf("Saliendo de insercion\n");
+	  
+}
+
+void Imprime(struct nodo *p)
+{
+  if(p != NULL)
+    {
+      Imprime(p->izq);
+      printf("%d\n", p->num);
+      Imprime(p->der);
+    }
+}
+
+void Borra(struct nodo *p)
+{
+  if(p != NULL)
+    {
+      Borra(p->izq);
+      Borra(p->der);
+      free(p);
+    }
+}

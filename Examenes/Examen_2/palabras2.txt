@@ -1,0 +1,10 @@
+palabras
+hojas
+silla
+mesa
+zapato
+arbol
+palabras
+mesa
+k
+w

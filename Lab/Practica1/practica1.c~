@@ -1,0 +1,270 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+void LeerArchivo(unsigned char *MatrizActual[], int *MagnitudY, int *MagnitudX, char NombreArchivo[]);
+void GuardarMatrizActual(unsigned char *MatrizActual[], int MagnitudY, int MagnitudX, char NombreArchivo[]);
+void NegativoImagen(int MagnitudY, int MagnitudX, unsigned char *MatrizActual [], unsigned char *MatrizNueva []);
+void EcualizacionLineal(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[]);
+void AmpliarImagen(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[]);
+void ReducirImagen(int X2, int Y2, unsigned char *MatrizActual[], unsigned char *MatrizNueva[]);
+void GuardarArchivo(int X2, int Y2, unsigned char *MatrizNueva[]);
+void BorrarMemoria(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[]);
+
+int main (void)
+{
+  unsigned char **MatrizActual, **MatrizNueva;
+  int  MagnitudY, MagnitudX, Magnitud2X, Magnitud2Y, Opcion, i,j, X2, Y2;
+  char NombreArchivo[50];
+
+  LeerArchivo(MatrizActual, &MagnitudY, &MagnitudX, NombreArchivo);
+  
+  MatrizActual = (unsigned char **) malloc(sizeof(unsigned char *)*MagnitudY);
+  for(i=0; i<MagnitudY; i++)
+    {
+      MatrizActual[i] = (unsigned char *) malloc(sizeof(unsigned char)*MagnitudX); 
+    }
+  
+  GuardarMatrizActual(MatrizActual, MagnitudY, MagnitudX, NombreArchivo);
+  
+  printf("\n\nBienvenido al menú para modificar su imagen, eliga la opción que desea:\n");
+  printf("1. El Negativo de la Imagen\n");
+  printf("2. La Ecualización Lineal de la Imagen\n");
+  printf("3. Ampliar la Imagen\n");
+  printf("4. Reducir la Imagen\n");
+  printf("5. Salir\n\n");
+  scanf("%d", &Opcion);
+  printf("\n");
+
+  switch(Opcion)
+    {
+    case 1:
+      X2 = MagnitudX; 
+      Y2 = MagnitudY;
+      MatrizNueva = (unsigned char **) malloc (sizeof(unsigned char *)*MagnitudY);
+      for (j=0; j<MagnitudY; j++)
+	{
+	  MatrizNueva[j] = (unsigned char *) malloc (sizeof(unsigned char)*MagnitudX);
+	}
+      NegativoImagen(MagnitudY, MagnitudX, MatrizActual, MatrizNueva);
+      break;
+      
+    case 2:
+      X2 = MagnitudX; 
+      Y2 = MagnitudY;
+      MatrizNueva = (unsigned char **) malloc (sizeof(unsigned char *)*MagnitudY);
+      for (j=0; j<MagnitudY; j++)
+	{
+	  MatrizNueva[j] = (unsigned char *) malloc (sizeof(unsigned char)*MagnitudX);
+	}
+      EcualizacionLineal(MagnitudY, MagnitudX, MatrizActual, MatrizNueva);
+      break;
+      
+    case 3:
+      X2 = MagnitudX*2; 
+      Y2 = MagnitudY*2;
+      MatrizNueva = (unsigned char **) malloc (sizeof(unsigned char *)*Y2);
+      for (j=0; j<Y2; j++)
+	{
+	  MatrizNueva[j] = (unsigned char *) malloc (sizeof(unsigned char)*X2);
+	}
+      AmpliarImagen(MagnitudY, MagnitudX, MatrizActual, MatrizNueva);
+      break;
+      
+    case 4:
+      X2 = MagnitudX/2; 
+      Y2 = MagnitudY/2;
+      MatrizNueva = (unsigned char **) malloc (sizeof(unsigned char *)*MagnitudY);
+      for (j=0; j<MagnitudY; j++)
+	{
+	  MatrizNueva[j] = (unsigned char *) malloc (sizeof(unsigned char)*MagnitudX);
+	}
+      ReducirImagen(X2, Y2, MatrizActual, MatrizNueva);
+      break;
+    case 5:
+      printf("Saliendo del programa...\n\n");
+      exit(0);
+      break;
+    default:
+      printf("Elija una opción válida.\n");
+      exit(0);
+    }
+  GuardarArchivo(X2, Y2, MatrizNueva);
+  BorrarMemoria(MagnitudY, MagnitudX, MatrizActual, MatrizNueva);
+}
+
+void LeerArchivo(unsigned char *MatrizActual[], int *MagnitudY, int *MagnitudX, char NombreArchivo[])
+{
+  FILE *Archivo;
+
+  printf("\nIntroduzca el nombre del archivo con la imagen a modificar:\n");
+  gets(NombreArchivo);
+  printf("\n");
+
+  Archivo = fopen(NombreArchivo, "rb");
+
+  if(Archivo == NULL)
+    {
+      printf("El archivo no existe, intente de nuevo abriendo otra vez el programa\n\n");
+      printf("Saliendo del programa...\n\n");
+      exit(0);
+    }
+  else
+    {
+      fseek(Archivo, 2L, SEEK_SET);
+      fscanf(Archivo," %d %d 255", MagnitudX, MagnitudY);
+      fclose(Archivo);
+    }
+
+ 
+
+}
+void GuardarMatrizActual(unsigned char *MatrizActual[], int MagnitudY, int MagnitudX, char NombreArchivo[])
+{
+  FILE *Archivo;
+  int i, j, Aux;
+  
+  Archivo = fopen(NombreArchivo, "rb");
+  
+  fseek(Archivo, 15L, SEEK_SET);
+  for(j=0; j<MagnitudY; j++)
+    {
+      for(i=0;i<MagnitudX; i++)
+	{
+	  fread (&MatrizActual[j][i], 1, 1, Archivo);  
+	}
+    }
+  
+}
+
+void NegativoImagen(int MagnitudY, int MagnitudX, unsigned char *MatrizActual [], unsigned char *MatrizNueva [])
+{
+  int i, j;
+  
+  for(j=0; j<MagnitudY; j++)
+    {
+      for(i=0; i<MagnitudX; i++)
+	{
+	  MatrizNueva[j][i] = 255 - MatrizActual[j][i];
+	}
+    }
+}
+
+void EcualizacionLineal(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[])
+{
+  int i, j, Max, Min;
+  double m, b;
+
+  Min = 255;
+  Max = 0;
+
+  for(j=0; j<MagnitudY; j++)
+    {
+      for(i=0; i<MagnitudX; i++)
+	{
+    
+	  if(MatrizActual[j][i] > Max)
+	    {
+	      Max = MatrizActual[j][i];
+	    }
+	  if(MatrizActual[j][i] < Min)
+	    {
+	      Min = MatrizActual[j][i];
+	    }
+	}
+    }
+
+  m = 255 / (Max - Min);
+  b = 255 - (m*Max);
+
+  //printf("Maximo %d\n", Max);
+  //printf("Minimo %d\n", Min);
+
+  for(j=0; j<MagnitudY; j++)
+    {
+      for(i=0; i<MagnitudX; i++)
+	{
+	  MatrizNueva[j][i] = MatrizActual[j][i]*m;
+	  MatrizNueva[j][i] = MatrizNueva[j][i] + b;
+	}
+    }
+}
+
+void AmpliarImagen(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[])
+{
+  int i, i2, j, j2;
+  
+  j2=0; 
+  for (j = 0; j < MagnitudY; j++) 
+  {
+    i2 = 0; 
+    for (i=0; i<MagnitudX; i++) 
+    {
+      MatrizNueva[j2][i2] = MatrizActual[j][i]; 
+      MatrizNueva[j2+1][i2] = MatrizActual[j][i]; 
+      MatrizNueva[j2][i2+1] = MatrizActual[j][i]; 
+      MatrizNueva[j2+1][i2+1] = MatrizActual[j][i];
+      i2+=2; 
+    }
+    j2+=2; 
+  }
+}
+
+
+void ReducirImagen(int X2, int Y2, unsigned char *MatrizActual[], unsigned char *MatrizNueva[])
+{
+  int i, i2, j, j2;
+  
+  j = 0; 
+  j2 = 0;
+  
+  while (j2<Y2)
+  {
+    i = 0;
+    i2 = 0;
+    while (i2<X2) 
+    {
+      MatrizNueva[j2][i2] = MatrizActual[j][i]; 
+      i = i + 2; 
+      i2 ++; 
+    }
+    j=j+2; 
+    j2 ++;
+  }
+
+}
+
+void GuardarArchivo(int X2, int Y2, unsigned char *MatrizNueva[])
+{
+  FILE *Archivo;
+  int i, j;
+  char NombreArchivo2[50];
+
+  printf("Elija el nombre del archivo donde desea guardar la imagen:\n");
+  __fpurge(stdin);
+  gets(NombreArchivo2);
+ 
+  
+  Archivo = fopen (NombreArchivo2,"wb"); 
+  fprintf (Archivo, "P5 %d %d 255 ", X2, Y2);
+  for (j=0; j<Y2; j++)
+    {
+    for (i=0; i<X2; i++)
+      {
+      fwrite (&MatrizNueva[j][i], 1, 1, Archivo);
+      }
+    }
+  printf ("\n ¡Imagen Guardada! \n\n"); 
+  fclose (Archivo);
+}
+
+void BorrarMemoria(int MagnitudY, int MagnitudX, unsigned char *MatrizActual[], unsigned char *MatrizNueva[])
+{
+  int i, j;
+  for (j=0; j<MagnitudY; j++)
+    {
+      free (MatrizActual[j]);
+    }
+  free(MatrizActual);
+}
+

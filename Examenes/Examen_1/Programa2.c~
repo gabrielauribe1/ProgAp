@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct Def_Documentos
+{
+  int ID, hojas;
+  char NombreDocumento[100];
+  struct Def_Documentos *sig;
+}TipoDocumento;
+
+void IntroducirDocumento();
+void ListarTrabajos();
+void EliminarTrabajo();
+void ImprimirDocumento();
+void GuardarArchivo();
+void LeerArchivo();
+
+int main (void)
+{
+  TipoDocumento *Inicio=NULL, NuevoDocumento;
+  int Opcion, Salir=0, Numeracion=1;
+
+  do
+    {
+      printf("Bienvedido al Menu de Cola de Impresión\n\n");
+      printf("Elija la opción que desee:\n");
+      printf("1. Introducir documento a la cola de impresión\n");
+      printf("2. Listar trabajos en la cola de impresión\n");
+      printf("3. Eliminar trabajo de la cola de impresión\n");
+      printf("4. Imprimir documento\n");
+      printf("5. Guardar cola en archivo\n");
+      printf("6. Leer cola en archivo\n");
+      printf("7. Salir\n");
+      scanf("%d", &Opcion);
+
+      switch(Opcion)
+	{
+	case 1:
+	  IntroducirDocumento();
+	  break;
+	case 2:
+	  ListarTrabajos();
+	  break;
+	case 3:
+	  EliminarTrabajo();
+	  break;
+	case 4:
+	  ImprimirDocumento();
+	  break;
+	case 5:
+	  GuardarArchivo();
+	  break;
+	case 6:
+	  LeerArchivo();
+	  break;
+	case 7:
+	  Salir=1;
+	  exit(0);
+	  break;
+	default:
+	  printf("Opcion inválida, intente de nuevo\n");
+	  break;
+	}
+    }while(Salir!=1);
+}
